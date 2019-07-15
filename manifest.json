@@ -1,0 +1,25 @@
+{
+    "name": "TLDW",
+    "version": "1.0",
+    "description": "Too Long Didn't Watch. An extension to make wastching videos faster",
+    "permissions": ["storage", "https://youtube.com/*"],
+    "content_scripts": [{
+        "all_frames": true,
+        "matches": [ "http://*/*", "https://*/*", "file:///*" ],
+        "match_about_blank": true,
+        "exclude_matches": [
+          "https://plus.google.com/hangouts/*",
+          "https://hangouts.google.com/*",
+          "https://meet.google.com/*",
+          "https://teamtreehouse.com/*",
+          "http://www.hitbox.tv/*"
+        ],
+        "js":  [ "script.js" ]
+      }
+    ],
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+    "manifest_version": 2
+  }
+  
