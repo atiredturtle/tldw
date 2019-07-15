@@ -7,16 +7,13 @@ function initialise() {
     analyser.fftSize = 512; //the total samples are half the fft size.
     videoMedia.connect(analyser);
     analyser.connect(context.destination);
-    // window.canvas = document.getElementById('c');
-    // window.ctx = canvas.getContext("2d");
 }
 
 // Globals
 totalMax = 0;
 totalAvg = 0;
 totalCount = 0;
-trackingSamples = 1024
-// trackingSamples = 512
+trackingSamples = 1024;
 volumeTracker = new Array(trackingSamples).fill(0);
 speedTracker = new Array(trackingSamples).fill(0);
 totalSilence = 0;
@@ -32,7 +29,7 @@ const defaultSettings = {
     pauseTime: 0, // 0 is default and infinite
 }
 
-let zip = (xs, ys) => {
+const zip = (xs, ys) => {
     return xs.map((e, i) =>[e, ys[i]]);
 };
 
@@ -206,10 +203,6 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 function loop() {
     let soundData = new Uint8Array(analyser.fftSize);
     analyser.getByteTimeDomainData(soundData);
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // ctx.fillStyle = 'black';
-    // ctx.fillRect(0,0, canvas.width, canvas.height);
 
     const currVolume = getVolume(soundData);
 
@@ -223,23 +216,13 @@ function loop() {
         if (silenceLen > settings.timeThreshold){
             const dynamicSpeed = settings.regularSpeed + (settings.silenceSpeed - settings.regularSpeed)*silenceRatio;
             setVideoSpeed(dynamicSpeed)
-            // setVideoSpeed(settings.silenceSpeed)
-            // console.log('silenceRatio: ', silenceRatio, ' speed: ', dynamicSpeed);
         }
     } else {
-        // if (silenceLen) {
-        //     console.log('silenceLen', silenceLen)
-        // }
         silenceLen = 0;
         setVideoSpeed(settings.regularSpeed);
     }
 
-    // drawVolumeTracker(ctx, settings.threshold);
-    // drawSpeedTracker(ctx);
-
     settings.threshold = getThresholdValue();
-
-    // requestAnimationFrame(loop); // TODO: see if we still need this
 }
 
 function loopHandler(){ 
@@ -250,26 +233,10 @@ function loopHandler(){
         console.log(' total Time: ', totalSeconds/1000, 'seconds', "totalSilence: ", totalSilence/1000, ' totalSound: ', totalSound/1000, ' % silence: ', (totalSilence/totalSeconds)*100, ' % sound: ', (totalSound/totalSeconds)*100);
     } else {
         if (!video.paused ) {
-            // console.log(settings.pauseTime, video.currentTime)
             loop();
         }
     }
 }
-
-// window.video = document.getElementsByTagName('video')[0];
-// document.addEventListener('DOMContentLoaded', function() {
-//    initialise();
-// }, false);
-
-// // circumvents a restriction on audio context. Can only be used if after user action
-// video.addEventListener('playing', function() {
-//   context.resume().then(() => {
-//     console.log('Playback resumed successfully');
-//     // loop();
-
-//     setInterval(loopHandler, settings.interval);
-//   });
-// });
 
 function saveDefaultSettings() {
     settings = defaultSettings;
@@ -278,8 +245,6 @@ function saveDefaultSettings() {
         settings.regularSpeed = res.regularSpeed || defaultSettings.regularSpeed;
         settings.pauseTime = res.pauseTime || defaultSettings.pauseTime;
     })
-
-
 }
 
 window.onload = () => {
