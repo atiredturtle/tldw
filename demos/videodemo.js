@@ -15,8 +15,7 @@ function initialise() {
 totalMax = 0;
 totalAvg = 0;
 totalCount = 0;
-trackingSamples = 1024
-// trackingSamples = 512
+trackingSamples = 1024;
 volumeTracker = new Array(trackingSamples).fill(0);
 speedTracker = new Array(trackingSamples).fill(0);
 totalSilence = 0;
@@ -30,7 +29,7 @@ const defaultSettings = {
     interval: 10, // in milliseconds
     timeThreshold: 10, 
     pauseTime: 10, // 0 is default and infinite
-}
+};
 
 let zip = (xs, ys) => {
     return xs.map((e, i) =>[e, ys[i]]);
